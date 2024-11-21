@@ -5,6 +5,19 @@
 Java library that provide dynamic validation for object
 
 ---
+### Setup
+- Pull git project
+- Run `mvn clean install -DskipTests`
+- Add dependency to your project 
+```
+    <dependency>
+        <groupId>com.nob</groupId>
+        <artifactId>validation</artifactId>
+        <version>0.0.1</version>
+    </dependency>
+```
+
+---
 ### Usage
 - Configuration scan package for validation
 ```
