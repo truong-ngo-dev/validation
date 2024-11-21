@@ -6,6 +6,13 @@ Java library that provide dynamic validation for object
 
 ---
 ### Usage
+- Configuration scan package for validation
+```
+    @Configuration
+    @ComponentScan("com.nob.validation")
+    public class ValidationConfiguration {
+    }
+```
 - Define two property in `application.properties` like this:
 ```
     validation.model.package=package.content.your.validation.model
