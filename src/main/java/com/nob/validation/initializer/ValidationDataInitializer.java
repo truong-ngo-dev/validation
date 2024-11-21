@@ -53,6 +53,7 @@ public class ValidationDataInitializer {
 
         List<ObjectValidationMetadata> metas = ClassUtils.loadJson(profileDirectory, ObjectValidationMetadata.class);
         for (ObjectValidationMetadata meta : metas) {
+            contextMetadataLoader.loadMetadata(meta.getJavaType(), meta.getJavaType().getName());
             if (!validationMetaProvider.contains(meta.getJavaType(), meta.getProfile())) {
                 validationMetaProvider.addValidation(meta);
             }

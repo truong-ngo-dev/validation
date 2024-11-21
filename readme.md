@@ -15,7 +15,7 @@ Java library that provide dynamic validation for object
 ```
 - Define two property in `application.properties` like this:
 ```
-    validation.model.package=package.content.your.validation.model
+    validation.model.package=package.contains.your.validation.model
     validation.profile.directory=resource.directory.of.additional.validation.profile
 ```
 
