@@ -1,5 +1,6 @@
 package com.nob.validation.validation;
 
+import com.nob.utils.TypeUtils;
 import com.nob.validation.annotation.Valid;
 import com.nob.validation.exception.ValidationException;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +31,10 @@ public class ValidationAspect {
                 if (annotation instanceof Valid valid) {
                     String profile = valid.profile();
                     Object param = args[i];
-                    EvaluationResult result = evaluators.evaluate(param, param.getClass(), profile);
+                    Class<?> clazz = TypeUtils.isCollection(param.getClass()) ?
+                            TypeUtils.getParameterGenericElementType(method, Valid.class) :
+                            param.getClass();
+                    EvaluationResult result = evaluators.evaluate(param, clazz, profile);
                     if (!result.isValid()) {
                         throw new ValidationException(result);
                     }

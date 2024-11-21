@@ -1,5 +1,6 @@
 package com.nob.validation.validation;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nob.validation.metadata.validation.ValidationCriteria;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,6 +13,8 @@ public class EvaluationResult {
 
     private final boolean valid;
     private Object message;
+
+    @JsonIgnore
     private ValidationCriteria criteria;
 
 

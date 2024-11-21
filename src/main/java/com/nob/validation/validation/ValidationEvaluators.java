@@ -37,11 +37,16 @@ public class ValidationEvaluators {
      * @param profile validation profile
      * @return {@code EvaluationResult} result of evaluation
      * */
-    @SuppressWarnings("unchecked")
     public EvaluationResult evaluate(Object o, Class<?> type, String profile) {
-
         String loadProfile = (Objects.isNull(profile)) ? "default" : profile;
         ObjectValidationMetadata validationMeta = validationMetaProvider.load(type, loadProfile);
+        return TypeUtils.isCollection(o.getClass()) ?
+                evaluateCollection(o, validationMeta) :
+                evaluateObject(o, validationMeta);
+    }
+
+    @SuppressWarnings("unchecked")
+    private EvaluationResult evaluateObject(Object o, ObjectValidationMetadata validationMeta) {
         DefaultContext context = contextBuilder.build(o, validationMeta);
 
         List<AttributeValidationMetadata> attributesMeta = validationMeta.getProperties();
@@ -60,6 +65,28 @@ public class ValidationEvaluators {
                 .flatMap(m -> m.entrySet().stream())
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
+        return EvaluationResult.failure(message, null);
+    }
+
+    @SuppressWarnings("unchecked")
+    private EvaluationResult evaluateCollection(Object o, ObjectValidationMetadata validationMeta) {
+        List<?> collection = new ArrayList<>(TypeUtils.getCollection(o));
+        List<EvaluationResult> rs = new ArrayList<>();
+        for (int i = 0; i < collection.size(); i++) {
+            EvaluationResult evaluationResult = evaluateObject(collection.get(i), validationMeta);
+            if (!evaluationResult.isValid()) {
+                Map<String, Object> message = MapUtils.appendKeyPrefix((Map<String, Object>) evaluationResult.getMessage(), String.format("[%s].", i));
+                evaluationResult.setMessage(message);
+            }
+            rs.add(evaluationResult);
+        }
+        boolean isValid = rs.stream().allMatch(EvaluationResult::isValid);
+        if (isValid) return EvaluationResult.success();
+        List<EvaluationResult> invalidResults = rs.stream().filter(r -> !r.isValid()).toList();
+        Map<String, Object> message = invalidResults.stream()
+                .map(r -> (Map<String, Object>) r.getMessage())
+                .flatMap(m -> m.entrySet().stream())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e, r) -> r));
         return EvaluationResult.failure(message, null);
     }
 
