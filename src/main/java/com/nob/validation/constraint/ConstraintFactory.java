@@ -36,6 +36,7 @@ public class ConstraintFactory {
         constraintAnnotationsType.add(NotEmpty.class);
         constraintAnnotationsType.add(com.nob.validation.annotation.Object.class);
         constraintAnnotationsType.add(Collection.class);
+        constraintAnnotationsType.add(Size.class);
     }
 
     /**
@@ -130,6 +131,16 @@ public class ConstraintFactory {
         }
         if (annotation instanceof Collection collection) {
             return new Constraint(ConstraintType.COLLECTION_ATTRIBUTE, StringUtils.nonEmptyValue(collection.condition()), Map.of(ParamKey.ELEMENT_PROFILE, collection.elementProfile()));
+        }
+        if (annotation instanceof Size size) {
+            Map<String, Object> params = new LinkedHashMap<>();
+            if (size.min() != Long.MIN_VALUE) params.put(ParamKey.MIN, size.min());
+            if (size.max() != Long.MAX_VALUE) params.put(ParamKey.MAX, size.max());
+            return new Constraint(
+                    ConstraintType.SIZE,
+                    StringUtils.nonEmptyValue(size.condition()),
+                    params
+            );
         }
         throw new IllegalArgumentException("Invalid annotation: " + annotation);
     }
