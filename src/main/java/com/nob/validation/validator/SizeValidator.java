@@ -23,18 +23,18 @@ public class SizeValidator implements Validator {
     public Result validateInternal(Context context, Attribute attribute, Constraint constraint) {
         Object value = attribute.getValue();
         if (Objects.isNull(value)) return Result.valid();
-        Long min = constraint.getParam(ParamKey.MIN, Long.class);
-        Long max = constraint.getParam(ParamKey.MAX, Long.class);
+        Number min = constraint.getParam(ParamKey.MIN, Number.class);
+        Number max = constraint.getParam(ParamKey.MAX, Number.class);
         if (Objects.nonNull(min) && Objects.nonNull(max)) {
             if (value instanceof String s) {
                 int length = s.length();
-                boolean result = length >= min && length <= max;
-                return result ? Result.valid() : Result.invalid(String.format(Message.MIN_MAX, min, max));
+                boolean result = length >= min.intValue() && length <= max.intValue();
+                return result ? Result.valid() : Result.invalid(String.format(Message.MIN_MAX_SIZE, min, max));
             }
             if (TypeUtils.isCollection(value.getClass())) {
                 Collection<?> collection = TypeUtils.getCollection(value);
                 int length = collection.size();
-                boolean result = length >= min && length <= max;
+                boolean result = length >= min.intValue() && length <= max.intValue();
                 return result ? Result.valid() : Result.invalid(String.format(Message.MIN_MAX_SIZE, min, max));
             }
             throw new IllegalArgumentException("Invalid value type: " + value.getClass());
@@ -42,13 +42,13 @@ public class SizeValidator implements Validator {
         if (Objects.nonNull(min)) {
             if (value instanceof String s) {
                 int length = s.length();
-                boolean result = length >= min;
+                boolean result = length >= min.intValue();
                 return result ? Result.valid() : Result.invalid(String.format(Message.MIN_SIZE, min));
             }
             if (TypeUtils.isCollection(value.getClass())) {
                 Collection<?> collection = TypeUtils.getCollection(value);
                 int length = collection.size();
-                boolean result = length >= min;
+                boolean result = length >= min.intValue();
                 return result ? Result.valid() : Result.invalid(String.format(Message.MIN_SIZE, min));
             }
             throw new IllegalArgumentException("Invalid value type: " + value.getClass());
@@ -56,13 +56,13 @@ public class SizeValidator implements Validator {
         if (Objects.nonNull(max)) {
             if (value instanceof String s) {
                 int length = s.length();
-                boolean result = length <= max;
+                boolean result = length <= max.intValue();
                 return result ? Result.valid() : Result.invalid(String.format(Message.MAX_SIZE, max));
             }
             if (TypeUtils.isCollection(value.getClass())) {
                 Collection<?> collection = TypeUtils.getCollection(value);
                 int length = collection.size();
-                boolean result = length <= max;
+                boolean result = length <= max.intValue();
                 return result ? Result.valid() : Result.invalid(String.format(Message.MAX_SIZE, max));
             }
             throw new IllegalArgumentException("Invalid value type: " + value.getClass());

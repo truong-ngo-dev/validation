@@ -24,6 +24,6 @@ public class NotAllowedCharactersValidator implements Validator {
         @SuppressWarnings("unchecked")
         List<String> chars = (List<String>) constraint.getParam(ParamKey.CHARACTERS);
         boolean valid = chars.stream().noneMatch(s::contains);
-        return valid ? Result.valid() : Result.invalid(String.format(Message.NOT_ALLOWED_CHARACTERS, s));
+        return valid ? Result.valid() : Result.invalid(String.format(Message.NOT_ALLOWED_CHARACTERS, chars));
     }
 }
