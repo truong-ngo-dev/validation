@@ -83,7 +83,7 @@ public class ConstraintFactory {
         }
         if (annotation instanceof NotAllowCharacter notAllowCharacter) {
             return new Constraint(
-                    ConstraintType.ALPHANUMERIC,
+                    ConstraintType.NOT_ALLOWED_CHARACTERS,
                     StringUtils.nonEmptyValue(notAllowCharacter.condition()),
                     Map.of(ParamKey.CHARACTERS, List.of(notAllowCharacter.characters())));
         }
@@ -98,7 +98,7 @@ public class ConstraintFactory {
         }
         if (annotation instanceof Regex regex) {
             return new Constraint(
-                    ConstraintType.PATTERN,
+                    ConstraintType.REGEX,
                     StringUtils.nonEmptyValue(regex.condition()),
                     Map.of(ParamKey.REGEX, List.of(regex.regex())));
         }

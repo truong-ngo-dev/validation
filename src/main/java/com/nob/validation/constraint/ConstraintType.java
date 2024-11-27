@@ -1,5 +1,7 @@
 package com.nob.validation.constraint;
 
+import com.nob.validation.validator.RegexValidator;
+
 /**
  * Type of constraint
  * @author Truong Ngo
@@ -186,15 +188,15 @@ public enum ConstraintType {
      *  Pattern type. Eg:
      * <blockquote><pre>
      *     {
-     *         "type": "PATTERN",
+     *         "type": "REGEX",
      *         "params": {
      *             "schemes": ["http", "https", "ftp"]
      *         }
      *     }
      * </pre></blockquote>
-     * @see com.nob.validation.validator.PatternValidator
+     * @see RegexValidator
      * */
-    PATTERN,
+    REGEX,
 
     /**
      * Alphanumeric type. Eg:

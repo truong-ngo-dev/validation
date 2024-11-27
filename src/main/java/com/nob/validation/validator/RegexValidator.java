@@ -9,12 +9,12 @@ import com.nob.validation.validator.constant.ParamKey;
 import java.util.Objects;
 
 /**
- * Validator for constraint of type {@link com.nob.validation.constraint.ConstraintType#PATTERN}
+ * Validator for constraint of type {@link com.nob.validation.constraint.ConstraintType#REGEX}
  * <p>
  * Apply for string type
  * @author Truong Ngo
  * */
-public class PatternValidator implements Validator {
+public class RegexValidator implements Validator {
     @Override
     public Result validateInternal(Context context, Attribute attribute, Constraint constraint) {
         String s = (String) attribute.getValue();

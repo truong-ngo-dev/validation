@@ -9,4 +9,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Future {
     String condition() default "";
+    String message() default "{com.nob.validation.annotation.Future.message}";
 }

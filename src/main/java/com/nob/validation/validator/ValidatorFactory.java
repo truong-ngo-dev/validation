@@ -34,7 +34,7 @@ public class ValidatorFactory {
         validators.put(ConstraintType.EMAIL, new EmailValidator());
         validators.put(ConstraintType.NOT_BLANK, new NotBlankValidator());
         validators.put(ConstraintType.URL, new URLValidator());
-        validators.put(ConstraintType.PATTERN, new PatternValidator());
+        validators.put(ConstraintType.REGEX, new RegexValidator());
         validators.put(ConstraintType.ALPHANUMERIC, new AlphanumericValidator());
         validators.put(ConstraintType.NOT_ALLOWED_CHARACTERS, new NotAllowedCharactersValidator());
 
