@@ -28,6 +28,9 @@ public class Constraint {
     private Map<String, Object> params;
 
 
+    public Constraint() {
+    }
+
     public Constraint(ConstraintType type, String condition, Map<String, Object> params) {
         this.type = type;
         this.condition = condition;
