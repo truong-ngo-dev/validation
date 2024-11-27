@@ -22,7 +22,7 @@ public class SizeValidator implements Validator {
     @Override
     public Result validateInternal(Context context, Attribute attribute, Constraint constraint) {
         Object value = attribute.getValue();
-        if (Objects.isNull(value)) return Validator.Result.valid();
+        if (Objects.isNull(value)) return Result.valid();
         Integer min = constraint.getParam(ParamKey.MIN, Integer.class);
         Integer max = constraint.getParam(ParamKey.MAX, Integer.class);
         if (Objects.nonNull(min) && Objects.nonNull(max)) {

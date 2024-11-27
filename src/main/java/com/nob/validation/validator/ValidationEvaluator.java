@@ -12,6 +12,7 @@ import com.nob.validation.metadata.validation.AttributeValidationMetadata;
 import com.nob.validation.metadata.validation.ObjectValidationMetadata;
 import com.nob.validation.metadata.validation.ValidationMetadataProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -33,10 +34,7 @@ public class ValidationEvaluator {
     private final ContextBuilder contextBuilder;
 
 
-    /**
-     * Factory for validator
-     * */
-    private final ValidatorFactory validatorFactory;
+    private final ApplicationContext applicationContext;
 
 
     /**
@@ -123,6 +121,7 @@ public class ValidationEvaluator {
      * @return {@code EvaluationResult} result of evaluation process
      * */
     private Result validateAttribute(Attribute attribute, AttributeValidationMetadata metadata, Context context) {
+        ValidatorFactory validatorFactory = applicationContext.getBean(ValidatorFactory.class);
         List<Constraint> constraints = metadata.getConstraints();
         List<Result> results = new ArrayList<>();
         for (Constraint c : constraints) {
