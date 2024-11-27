@@ -23,8 +23,8 @@ public class SizeValidator implements Validator {
     public Result validateInternal(Context context, Attribute attribute, Constraint constraint) {
         Object value = attribute.getValue();
         if (Objects.isNull(value)) return Result.valid();
-        Integer min = constraint.getParam(ParamKey.MIN, Integer.class);
-        Integer max = constraint.getParam(ParamKey.MAX, Integer.class);
+        Long min = constraint.getParam(ParamKey.MIN, Long.class);
+        Long max = constraint.getParam(ParamKey.MAX, Long.class);
         if (Objects.nonNull(min) && Objects.nonNull(max)) {
             if (value instanceof String s) {
                 int length = s.length();

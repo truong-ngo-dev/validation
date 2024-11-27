@@ -24,10 +24,5 @@ public class AttributeValidationMetadata implements ValidationMetadata {
     /**
      * Criteria apply on attribute
      * */
-    private List<ValidationCriteria> criteria;
-
-    /**
-     * Criteria apply on attribute
-     * */
     private List<Constraint> constraints;
 }

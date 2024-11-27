@@ -24,11 +24,11 @@ public interface Validator {
      * */
     default Result validate(Context context, Attribute attribute, Constraint constraint) {
         String condition = constraint.getCondition();
-        if (Objects.isNull(condition)) return validate(context, attribute, constraint);
+        if (Objects.isNull(condition)) return validateInternal(context, attribute, constraint);
         Boolean applicable = SpElUtils.resolve(condition, context.getValue(), Boolean.class);
         if (Objects.isNull(applicable))
             throw new ValidationMetadataException("Condition '" + condition + "' is not resolvable!");
-        return applicable ? validate(context, attribute, constraint) : Result.valid();
+        return applicable ? validateInternal(context, attribute, constraint) : Result.valid();
     }
 
 
