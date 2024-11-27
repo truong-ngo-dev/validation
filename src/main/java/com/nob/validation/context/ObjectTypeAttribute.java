@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 public class ObjectTypeAttribute extends AbstractAttribute implements Attribute {
 
-    private DefaultContext context;
+    private ObjectBasedContext context;
 
     public ObjectTypeAttribute(AttributeMetadata attributeMetadata) {
         super(attributeMetadata);

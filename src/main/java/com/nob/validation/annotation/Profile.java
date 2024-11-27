@@ -6,7 +6,6 @@ import java.lang.annotation.RetentionPolicy;
 /**
  * Marker the validation model. Use to generate the validation metadata and context metadata<p>
  * when application start
- * @see Constraint
  * @author Truong Ngo
  * */
 @Retention(RetentionPolicy.RUNTIME)

@@ -1,5 +1,6 @@
 package com.nob.validation.metadata.validation;
 
+import com.nob.validation.constraint.Constraint;
 import lombok.Data;
 
 import java.util.List;
@@ -25,4 +26,8 @@ public class AttributeValidationMetadata implements ValidationMetadata {
      * */
     private List<ValidationCriteria> criteria;
 
+    /**
+     * Criteria apply on attribute
+     * */
+    private List<Constraint> constraints;
 }

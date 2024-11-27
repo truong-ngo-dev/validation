@@ -1,10 +1,7 @@
 package com.nob.validation.enumerate;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.time.*;
-import java.util.Collection;
-import java.util.Date;
+import com.nob.utils.TypeUtils;
+
 import java.util.Objects;
 
 /**
@@ -19,48 +16,20 @@ public enum FieldType {
     OBJECT,
     COLLECTION;
 
+    public static final FieldType[] ALL = FieldType.values();
+
     public static FieldType[] of(FieldType... types) {
         return types;
     }
 
-    public static FieldType ofValue(Object value) {
-        Objects.requireNonNull(value);
-        if (isString(value)) return STRING;
-        if (isInteger(value)) return INTEGER;
-        if (isDecimal(value)) return DECIMAL;
-        if (isBoolean(value)) return BOOLEAN;
-        if (isDate(value)) return DATE;
-        if (isCollection(value)) return COLLECTION;
+    public static FieldType of(Class<?> clazz) {
+        Objects.requireNonNull(clazz);
+        if (TypeUtils.isString(clazz)) return STRING;
+        if (TypeUtils.isInteger(clazz)) return INTEGER;
+        if (TypeUtils.isDecimal(clazz)) return DECIMAL;
+        if (TypeUtils.isBoolean(clazz)) return BOOLEAN;
+        if (TypeUtils.isDate(clazz)) return DATE;
+        if (TypeUtils.isCollection(clazz)) return COLLECTION;
         return OBJECT;
-    }
-
-    public static boolean isString(Object o) {
-        return o instanceof String || o instanceof Character;
-    }
-
-    public static boolean isInteger(Object o) {
-        return o instanceof Integer || o instanceof Long || o instanceof BigInteger;
-    }
-
-    public static boolean isDecimal(Object o) {
-        return o instanceof BigDecimal || o instanceof Double || o instanceof Float;
-    }
-
-    public static boolean isBoolean(Object o) {
-        return o instanceof Boolean;
-    }
-
-    public static boolean isDate(Object o) {
-        if (o instanceof Date) return true;
-        if (o instanceof LocalDate) return true;
-        if (o instanceof LocalTime) return true;
-        if (o instanceof LocalDateTime) return true;
-        if (o instanceof ZonedDateTime) return true;
-        return o instanceof Instant;
-    }
-
-    public static boolean isCollection(Object o) {
-        if (o.getClass().isArray()) return true;
-        return Collection.class.isAssignableFrom(o.getClass());
     }
 }

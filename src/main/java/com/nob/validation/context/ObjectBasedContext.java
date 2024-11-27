@@ -11,11 +11,11 @@ import java.util.List;
  * */
 @Getter
 @Setter
-public class DefaultContext extends AbstractContext {
+public class ObjectBasedContext extends AbstractContext {
 
     private List<Attribute> attributes;
 
-    public DefaultContext(ContextMetadata metadata) {
+    public ObjectBasedContext(ContextMetadata metadata) {
         super(metadata);
     }
 

@@ -1,8 +1,10 @@
-package com.nob.validation.validation;
+package com.nob.validation.initializer;
 
 import com.nob.utils.TypeUtils;
 import com.nob.validation.annotation.Valid;
 import com.nob.validation.exception.ValidationException;
+import com.nob.validation.validator.Result;
+import com.nob.validation.validator.ValidationEvaluator;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -18,7 +20,7 @@ import java.lang.reflect.Method;
 @RequiredArgsConstructor
 public class ValidationAspect {
 
-    private final ValidationEvaluators evaluators;
+    private final ValidationEvaluator evaluator;
 
     @Before(value = "@annotation(com.nob.validation.annotation.Validated)")
     public void evaluate(JoinPoint joinPoint) {
@@ -34,7 +36,7 @@ public class ValidationAspect {
                     Class<?> clazz = TypeUtils.isCollection(param.getClass()) ?
                             TypeUtils.getParameterGenericElementType(method, Valid.class) :
                             param.getClass();
-                    EvaluationResult result = evaluators.evaluate(param, clazz, profile);
+                    Result result = evaluator.validate(param, clazz, profile);
                     if (!result.isValid()) {
                         throw new ValidationException(result);
                     }

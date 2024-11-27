@@ -1,12 +1,12 @@
 package com.nob.validation.exception;
 
-import com.nob.validation.validation.EvaluationResult;
+import com.nob.validation.validator.Result;
 import lombok.Getter;
 
 @Getter
 public class ValidationException extends RuntimeException {
 
-    private EvaluationResult evaluationResult;
+    private Result result;
 
     public ValidationException(String message, Throwable cause) {
         super(message, cause);
@@ -16,7 +16,7 @@ public class ValidationException extends RuntimeException {
         super(message);
     }
 
-    public ValidationException(EvaluationResult evaluationResult) {
-        this.evaluationResult = evaluationResult;
+    public ValidationException(Result result) {
+        this.result = result;
     }
 }

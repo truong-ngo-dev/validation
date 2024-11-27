@@ -16,7 +16,7 @@ public class CollectionTypeAttribute extends AbstractAttribute implements Attrib
     /**
      * Hold the collection of element's context
      * */
-    private List<DefaultContext> contexts;
+    private List<ObjectBasedContext> contexts;
 
     /**
      * Java type of element

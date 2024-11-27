@@ -1,7 +1,6 @@
 package com.nob.validation.context;
 
 import com.nob.utils.TypeUtils;
-import com.nob.validation.annotation.Constraint;
 import com.nob.validation.exception.ValidationMetadataException;
 import com.nob.validation.metadata.context.AttributeMetadata;
 import com.nob.validation.metadata.context.ContextMetadataProvider;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Stream;
 
 @Component
 @RequiredArgsConstructor
@@ -36,9 +34,9 @@ public class ContextBuilder {
      * @param o given object
      * @return {@code DefaultContext} the context represent the validated object
      * */
-    public DefaultContext build(Object o, ObjectValidationMetadata validationMeta) {
+    public ObjectBasedContext build(Object o, ObjectValidationMetadata validationMeta) {
         ObjectMetadata metadata = (ObjectMetadata) metadataProvider.load(o.getClass());
-        DefaultContext context = new DefaultContext(metadata);
+        ObjectBasedContext context = new ObjectBasedContext(metadata);
         List<String> validationAttribute = validationMeta.getProperties()
                 .stream()
                 .map(AttributeValidationMetadata::getName)
@@ -89,11 +87,10 @@ public class ContextBuilder {
         ObjectTypeAttribute attribute = new ObjectTypeAttribute(metadata);
         setAttributeValue(attribute, o);
         if (Objects.isNull(attribute.getValue())) return attribute;
-        Constraint[] annotations = metadata.getField().getAnnotationsByType(Constraint.class);
-        @SuppressWarnings("all")
-        String profile = Stream.of(annotations).map(Constraint::profile).filter(p -> !p.isEmpty()).findFirst().get();
+        com.nob.validation.annotation.Object object = metadata.getField().getAnnotation(com.nob.validation.annotation.Object.class);
+        String profile = object.profile();
         ObjectValidationMetadata meta = validationMetadataProvider.load(o.getClass(), profile);
-        DefaultContext attributeContext = build(attribute.getValue(), meta);
+        ObjectBasedContext attributeContext = build(attribute.getValue(), meta);
         attribute.setContext(attributeContext);
         return attribute;
     }
@@ -109,14 +106,13 @@ public class ContextBuilder {
         if (Objects.isNull(attribute.getValue())) return attribute;
         if (attribute.getValue().isEmpty()) return attribute;
         List<?> items = attribute.getValue();
-        List<DefaultContext> contexts = new ArrayList<>();
+        List<ObjectBasedContext> contexts = new ArrayList<>();
+        com.nob.validation.annotation.Collection object = metadata.getField().getAnnotation(com.nob.validation.annotation.Collection.class);
+        String profile = object.elementProfile();
         for (Object item : items) {
             if (Objects.isNull(item)) continue;
-            Constraint[] annotations = metadata.getField().getAnnotationsByType(Constraint.class);
-            @SuppressWarnings("all")
-            String profile = Stream.of(annotations).map(Constraint::profile).filter(p -> !p.isEmpty()).findFirst().get();
             ObjectValidationMetadata meta = validationMetadataProvider.load(metadata.getElementJavaType(), profile);
-            DefaultContext attributeContext = build(item, meta);
+            ObjectBasedContext attributeContext = build(item, meta);
             contexts.add(attributeContext);
         }
         attribute.setContexts(contexts);

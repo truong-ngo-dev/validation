@@ -30,4 +30,5 @@ public interface Context {
      * Set original value for context
      * */
     void setValue(Object value);
+
 }
