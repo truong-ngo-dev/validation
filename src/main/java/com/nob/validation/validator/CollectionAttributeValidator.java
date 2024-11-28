@@ -29,31 +29,11 @@ public class CollectionAttributeValidator implements Validator {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public Result validateInternal(Context context, Attribute attribute, Constraint constraint) {
         Object val = attribute.getValue();
         if (Objects.isNull(val)) return Result.valid();
         String elementProfile = constraint.getParam(ParamKey.ELEMENT_PROFILE, String.class);
-        List<?> collection = List.of(TypeUtils.getCollection(val));
-        CollectionTypeAttribute cta = (CollectionTypeAttribute) attribute;
-        List<Result> results = new ArrayList<>();
-        for (int i = 0; i < collection.size(); i++) {
-            Object item = collection.get(i);
-            Result r = delegate.validate(item, cta.getElementJavaType(), elementProfile);
-            if (!r.isValid()) {
-                Map<String, Object> message = (Map<String, Object>) r.getMessage();
-                message = MapUtils.appendKeyPrefix(message, String.format("[%s]." , i));
-                r.setMessage(message);
-            }
-            results.add(r);
-        }
-        boolean valid = results.stream().allMatch(Result::isValid);
-        if (valid) return Result.valid();
-        List<Result> invalidResults = results.stream().filter(r -> !r.isValid()).toList();
-        Map<String, Object> message = invalidResults.stream()
-                .flatMap(r -> ((Map<String, Object>) r.getMessage()).entrySet().stream())
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-
-        return Result.invalid(message);
+        Class<?> elementJavaType = ((CollectionTypeAttribute) attribute).getElementJavaType();
+        return delegate.validate(val, elementJavaType, elementProfile);
     }
 }
